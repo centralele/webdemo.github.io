@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blast Wash - Professional Pressure Washing Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Service card hover effect */
+        .service-card:hover .service-image {
+            transform: scale(1.05);
+        }
+        
+        /* Hero section with background image */
+        .hero-section {
+            background-image: url('https://i.imghippo.com/files/zoIQ4995Dao.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* Hero dark overlay for better text contrast */
+        .hero-overlay {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Image styling */
+        .service-image {
+            object-fit: cover;
+            width: 100%;
+            height: 400px;
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50">
+    <!-- Hero Section -->
+    <section class="hero-section relative h-screen flex items-center overflow-hidden">
+        <div class="absolute inset-0 hero-overlay"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-2xl fade-in">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
+                    REVITALIZE YOUR<br>PROPERTY WITH<br>EXPERT CLEANING
+                </h1>
+                <p class="text-xl text-white opacity-90 mb-8">
+                    Transform your home's exterior with our professional pressure washing services. Get a sparkling clean finish that enhances curb appeal and protects your investment.
+                </p>
+                <a href="tel:+13472723010" class="inline-block px-8 py-3 bg-white text-gray-800 font-bold rounded-full hover:bg-transparent hover:text-white border-2 border-white transition-all duration-300 hover:-translate-y-1">
+                    Get Free Estimate
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section 1 -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    OUR PREMIER EXTERIOR CLEANING<br>SERVICES
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-1">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/IPnf6913uMM.jpg" alt="Full Exterior Cleaning" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">FULL EXTERIOR<br>CLEANING</h3>
+                        <p class="text-gray-600">
+                            Revitalize your entire building's exterior with our comprehensive cleaning service that removes years of dirt, grime, and environmental buildup.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Service Card 2 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-2">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/Ws9098vs.jpg" alt="Driveway Cleaning" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">DRIVEWAY CLEANING FOR A<br>FRESH LOOK</h3>
+                        <p class="text-gray-600">
+                            Restore your driveway's original beauty with our deep cleaning service. We eliminate oil stains, tire marks, and years of buildup to create an impressive first impression that enhances your property's value.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Service Card 3 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-3">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/KaW5531dDM.jpg" alt="Walkway Cleaning" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">WALKWAY CLEANING TO<br>ENHANCE CURB APPEAL</h3>
+                        <p class="text-gray-600">
+                            Create inviting pathways with our thorough walkway cleaning service. We remove dirt, moss, and grime from concrete, stone, and paver surfaces to ensure safe passage and beautiful aesthetics.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12 fade-in">
+                <a href="https://www.instagram.com/blast.wash/" target="_blank" class="inline-block px-8 py-3 bg-gray-800 text-white font-bold rounded-full hover:bg-gray-700 border-2 border-gray-800 transition-all duration-300 hover:-translate-y-1">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section 2 -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+                    EXPLORE OUR COMPREHENSIVE<br>CLEANING SOLUTIONS
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-1">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/jZkA1321ayc.jpg" alt="Paver Restoration" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">PRESSURE WASHING, SANDING,<br>& SEALING PAVERS</h3>
+                        <p class="text-gray-600">
+                            Complete paver restoration service including deep cleaning, sand replacement, and protective sealing to extend the life and beauty of your paved surfaces.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Service Card 2 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-2">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/pkxY4420wXY.jpg" alt="Pool Deck Cleaning" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">POOL DECK CLEANING FOR A<br>FRESH LOOK</h3>
+                        <p class="text-gray-600">
+                            Transform your pool area with our specialized deck cleaning that eliminates algae, creates safer surfaces, and restores the beauty of your outdoor space.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Service Card 3 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-3">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/nmC3336sg.jpg" alt="Stair Cleaning" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">STAIR CLEANING TO<br>ENHANCE SAFETY</h3>
+                        <p class="text-gray-600">
+                            Ensure safety and visual appeal with our thorough stair cleaning service that removes slippery buildup and restores traction to all step surfaces.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12 fade-in">
+                <a href="https://www.instagram.com/blast.wash/" target="_blank" class="inline-block px-8 py-3 bg-gray-800 text-white font-bold rounded-full hover:bg-gray-700 border-2 border-gray-800 transition-all duration-300 hover:-translate-y-1">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section 3 -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-1">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/odKz2120poA.jpg" alt="Garden Wall Cleaning" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">GARDEN WALL CLEANING</h3>
+                        <p class="text-gray-600">
+                            Restore the natural beauty of your garden walls and retaining structures with our specialized cleaning that removes moss, algae, and weather stains.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Service Card 2 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-2">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/QTQ7090YTc.jpg" alt="Sidewalk Cleaning" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">SIDEWALK CLEANING</h3>
+                        <p class="text-gray-600">
+                            Maintain clean and welcoming sidewalks that enhance your property's street appeal while ensuring safe pedestrian access for all visitors.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Service Card 3 -->
+                <div class="service-card bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 fade-in delay-3">
+                    <div class="overflow-hidden">
+                        <img src="https://i.imghippo.com/files/Gqd9279nJE.jpg" alt="Car Interior Detailing" class="service-image">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">CAR INTERIOR<br>DETAILING</h3>
+                        <p class="text-gray-600">
+                            Transform your vehicle's interior with our comprehensive detailing service. We deep clean upholstery, carpets, and surfaces while sanitizing and protecting to restore that new car feel and maintain your investment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12 fade-in">
+                <a href="https://www.instagram.com/blast.wash/" target="_blank" class="inline-block px-8 py-3 bg-gray-800 text-white font-bold rounded-full hover:bg-gray-700 border-2 border-gray-800 transition-all duration-300 hover:-translate-y-1">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="py-20 bg-black text-white">
+        <div class="container mx-auto px-6 text-center">
+            <div class="text-yellow-400 text-3xl mb-6 fade-in">★★★★★</div>
+            <p class="text-xl md:text-2xl font-bold mb-6 max-w-3xl mx-auto leading-relaxed fade-in">
+                "MY SEARCH FOR TOP-NOTCH SERVICE ENDS HERE! THE WORK DONE BY BLASTWASH SURPASSES ALL OTHERS I'VE TRIED. HIGHLY IMPRESSED AND DEFINITELY RECOMMENDING THEM TO EVERYONE!"
+            </p>
+            <p class="text-gray-400 font-bold fade-in">Hannah, D</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-20 bg-black text-white" id="contact">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col items-center text-center fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    GET YOUR FREE ESTIMATE<br>TODAY
+                </h2>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl">
+                    Contact us now for a complimentary estimate on all your exterior cleaning needs!
+                </p>
+                <a href="tel:+13472723010" class="inline-block px-8 py-3 bg-white text-gray-800 font-bold rounded-full hover:bg-transparent hover:text-white border-2 border-white transition-all duration-300 hover:-translate-y-1">
+                    Get Free Estimate
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-gray-900 text-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-center">
+                <!-- Instagram Button -->
+                <div class="fade-in">
+                    <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        📷
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">FOLLOW US</h3>
+                    <a href="https://www.instagram.com/blast.wash/" target="_blank" class="inline-block px-8 py-3 bg-gray-800 text-white font-bold rounded-full hover:bg-gray-700 border-2 border-gray-800 transition-all duration-300 hover:-translate-y-1">
+                        Instagram
+                    </a>
+                </div>
+                
+                <!-- Phone Button -->
+                <div class="fade-in delay-1">
+                    <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        📞
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">CALL US</h3>
+                    <a href="tel:+13472723010" class="inline-block px-8 py-3 bg-white text-gray-800 font-bold rounded-full hover:bg-transparent hover:text-white border-2 border-white transition-all duration-300 hover:-translate-y-1">
+                        +1 (347) 272-3010
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple animation trigger on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            fadeElements.forEach(element => {
+                element.style.opacity = 0;
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
