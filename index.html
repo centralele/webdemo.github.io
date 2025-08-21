@@ -1,67 +1,243 @@
-<!DOCTYPE html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blast Wash - Professional Pressure Washing Services</title>
+    <title>Perfection Powerwashing Showcase</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%);
+        html {
+            scroll-behavior: smooth;
         }
-        .service-card:hover {
-            transform: translateY(-5px);
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e3a8a, #0ea5e9);
+        }
+        .card-hover:hover {
+            transform: translateY(-0.5rem);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        .testimonial-card {
-            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .card-hover:hover img {
+            transform: scale(1.05);
         }
-        .cta-gradient {
-            background: linear-gradient(135deg, #0ea5e9 0%, #1e3a8a 100%);
+        .testimonial-gradient {
+            background: linear-gradient(145deg, hsl(210, 40%, 98%), hsl(210, 40%, 96%));
+        }
+        .modal-overlay {
+            background: transparent;
+        }
+        .carousel-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        .carousel-button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .scale-in {
+            animation: scaleIn 0.3s ease-out;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            .mobile-menu {
+                animation: slideDown 0.3s ease-out;
+            }
+            @keyframes slideDown {
+                from {
+                    transform: translateY(-20px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+        }
+        .service-icon {
+            font-size: 2.5rem;
+            color: #0ea5e9;
+            margin-bottom: 1rem;
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(14, 165, 233, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
+            }
+        }
+        .phone-icon {
+            transform: rotate(90deg);
         }
     </style>
 </head>
-<body class="font-sans antialiased text-gray-800">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-md sticky top-0 z-50">
+<body class="bg-gray-50 text-gray-900 antialiased">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center">
-                <span class="text-2xl font-bold text-blue-900">BLAST WASH</span>
-            </div>
-            <div class="hidden md:flex space-x-8">
-                <a href="#services" class="text-blue-900 hover:text-blue-600 font-medium">Services</a>
-                <a href="#testimonials" class="text-blue-900 hover:text-blue-600 font-medium">Testimonials</a>
-                <a href="#contact" class="text-blue-900 hover:text-blue-600 font-medium">Contact</a>
-            </div>
-            <div class="md:hidden">
-                <button id="menu-toggle" class="text-blue-900 focus:outline-none">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
+            <a href="#" class="text-2xl font-bold text-gray-900 flex items-center">
+                <i class="fas fa-water mr-2 text-blue-600"></i>
+                PERFECTION POWERWASHING
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#services" class="text-gray-900 hover:text-blue-600 font-medium transition-colors flex items-center">
+                    <i class="fas fa-broom mr-2"></i> Services
+                </a>
+                <a href="#why-choose-us" class="text-gray-900 hover:text-blue-600 font-medium transition-colors flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i> Why Choose Us
+                </a>
+                <a href="#testimonials" class="text-gray-900 hover:text-blue-600 font-medium transition-colors flex items-center">
+                    <i class="fas fa-star mr-2"></i> Testimonials
+                </a>
+                <a href="#footer" class="text-gray-900 hover:text-blue-600 font-medium transition-colors flex items-center">
+                    <i class="fas fa-phone mr-2"></i> Contact
+                </a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden text-gray-900">
+                <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-lg">
-            <a href="#services" class="block py-2 text-blue-900 hover:text-blue-600">Services</a>
-            <a href="#testimonials" class="block py-2 text-blue-900 hover:text-blue-600">Testimonials</a>
-            <a href="#contact" class="block py-2 text-blue-900 hover:text-blue-600">Contact</a>
+        <div id="mobile-menu" class="md:hidden hidden bg-white py-2 px-4 shadow-lg mobile-menu">
+            <nav class="flex flex-col space-y-2">
+                <a href="#services" class="block py-2 text-gray-900 hover:text-blue-600 flex items-center">
+                    <i class="fas fa-broom mr-2"></i> Services
+                </a>
+                <a href="#why-choose-us" class="block py-2 text-gray-900 hover:text-blue-600 flex items-center">
+                    <i class="fas fa-check-circle mr-2"></i> Why Choose Us
+                </a>
+                <a href="#testimonials" class="block py-2 text-gray-900 hover:text-blue-600 flex items-center">
+                    <i class="fas fa-star mr-2"></i> Testimonials
+                </a>
+                <a href="#footer" class="block py-2 text-gray-900 hover:text-blue-600 flex items-center">
+                    <i class="fas fa-phone mr-2"></i> Contact
+                </a>
+            </nav>
         </div>
-    </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="hero-gradient text-white py-20 md:py-32">
-        <div class="container mx-auto px-4">
-            <div class="max-w-3xl mx-auto text-center">
+    <section class="hero-gradient text-white py-20 md:py-32 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-1/4 left-1/4 w-32 h-32 rounded-full bg-blue-400 filter blur-3xl"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-40 h-40 rounded-full bg-blue-300 filter blur-3xl"></div>
+        </div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto text-center fade-in">
                 <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                     REVITALIZE YOUR PROPERTY WITH EXPERT CLEANING
                 </h1>
                 <p class="text-xl md:text-2xl mb-10 opacity-90">
                     Transform your home's exterior with our professional pressure washing services. Get a sparkling clean finish that enhances curb appeal and protects your investment.
                 </p>
-                <a href="tel:+13472723010" class="inline-block bg-white text-blue-900 font-bold py-4 px-8 rounded-full hover:bg-gray-100 transition duration-300 transform hover:scale-105">
-                    Get Free Estimate
-                </a>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="tel:+12069145841" class="inline-block bg-white text-blue-600 font-bold py-4 px-8 rounded-full hover:bg-gray-100 transition duration-300 flex items-center justify-center pulse">
+                        <i class="fas fa-phone-alt mr-2 phone-icon"></i> Get Free Estimate
+                    </a>
+                    <a href="#services" class="inline-block border-2 border-white text-white font-bold py-4 px-8 rounded-full hover:bg-white hover:text-gray-900 transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-info-circle mr-2"></i> Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-50 to-transparent"></div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="p-4">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">500+</div>
+                    <div class="text-gray-600">Happy Clients</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">15+</div>
+                    <div class="text-gray-600">Years Experience</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">100%</div>
+                    <div class="text-gray-600">Satisfaction</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">24/7</div>
+                    <div class="text-gray-600">Customer Support</div>
+                </div>
             </div>
         </div>
     </section>
@@ -70,135 +246,147 @@
     <section id="services" class="py-16 md:py-24 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-blue-900 mb-4">OUR PREMIER EXTERIOR CLEANING SERVICES</h2>
-                <div class="w-24 h-1 bg-blue-500 mx-auto"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">OUR SPECIALIZED CLEANING SERVICES</h2>
+                <div class="w-24 h-1 bg-cyan-500 mx-auto"></div>
+                <p class="mt-6 text-gray-600 max-w-2xl mx-auto">
+                    We offer a comprehensive range of professional cleaning services to meet all your exterior cleaning needs.
+                </p>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service 1 -->
-                <div class="service-card bg-white rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/IPnf6913uMM.jpg" alt="Full Exterior Cleaning" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">FULL EXTERIOR CLEANING</h3>
-                        <p class="text-gray-600">
-                            Revitalize your entire building's exterior with our comprehensive cleaning service that removes years of dirt, grime, and environmental buildup.
-                        </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 card-hover cursor-pointer scale-in" onclick="openModal('before')">
+                    <div class="w-full aspect-[9/16] relative overflow-hidden">
+                        <img src="https://i.imghippo.com/files/CTL7054l.jpg" alt="Dirty siding" class="w-full h-full object-cover transition-transform duration-300">
+                    </div>
+                    <div class="p-6 min-h-[120px] flex flex-col items-center justify-center">
+                        <div class="service-icon">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center">BEFORE</h3>
+                        <p class="text-gray-600 text-center mt-2">See the transformation we can achieve</p>
                     </div>
                 </div>
 
-                <!-- Service 2 -->
-                <div class="service-card bg-white rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/Ws9098vs.jpg" alt="Driveway Cleaning" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">DRIVEWAY CLEANING FOR A FRESH LOOK</h3>
-                        <p class="text-gray-600">
-                            Restore your driveway's original beauty with our deep cleaning service. We eliminate oil stains, tire marks, and years of buildup to create an impressive first impression.
-                        </p>
+                <!-- Service Card 2 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 card-hover cursor-pointer scale-in" onclick="openModal('after')">
+                    <div class="w-full aspect-[9/16] relative overflow-hidden">
+                        <img src="https://i.imghippo.com/files/vURK7452Uc.jpg" alt="Clean siding" class="w-full h-full object-cover transition-transform duration-300">
+                    </div>
+                    <div class="p-6 min-h-[120px] flex flex-col items-center justify-center">
+                        <div class="service-icon">
+                            <i class="fas fa-sparkles"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center">AFTER</h3>
+                        <p class="text-gray-600 text-center mt-2">Our professional results</p>
                     </div>
                 </div>
 
-                <!-- Service 3 -->
-                <div class="service-card bg-white rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/KaW5531dDM.jpg" alt="Walkway Cleaning" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">WALKWAY CLEANING TO ENHANCE CURB APPEAL</h3>
-                        <p class="text-gray-600">
-                            Create inviting pathways with our thorough walkway cleaning service. We remove dirt, moss, and grime from concrete, stone, and paver surfaces.
-                        </p>
+                <!-- Service Card 3 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 card-hover cursor-pointer scale-in" onclick="openModal('commercial')">
+                    <div class="w-full aspect-[9/16] relative overflow-hidden">
+                        <img src="https://i.imghippo.com/files/lYNe7342qrU.jpg" alt="Commercial cleaning" class="w-full h-full object-cover transition-transform duration-300">
+                    </div>
+                    <div class="p-6 min-h-[120px] flex flex-col items-center justify-center">
+                        <div class="service-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center">COMMERCIAL</h3>
+                        <p class="text-gray-600 text-center mt-2">Business property cleaning</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="text-center mt-12">
-                <a href="https://www.instagram.com/blast.wash/" class="inline-block border-2 border-blue-900 text-blue-900 font-bold py-3 px-8 rounded-full hover:bg-blue-900 hover:text-white transition duration-300">
-                    Learn More
-                </a>
+                <!-- Service Card 4 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 card-hover cursor-pointer scale-in" onclick="openModal('decks')">
+                    <div class="w-full aspect-[9/16] relative overflow-hidden">
+                        <img src="https://i.imghippo.com/files/QDY4927nmY.jpg" alt="Deck cleaning" class="w-full h-full object-cover transition-transform duration-300">
+                    </div>
+                    <div class="p-6 min-h-[120px] flex flex-col items-center justify-center">
+                        <div class="service-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center">DECKS</h3>
+                        <p class="text-gray-600 text-center mt-2">Wood restoration & cleaning</p>
+                    </div>
+                </div>
+
+                <!-- Service Card 5 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 card-hover cursor-pointer scale-in" onclick="openModal('solar')">
+                    <div class="w-full aspect-[9/16] relative overflow-hidden">
+                        <img src="https://i.imghippo.com/files/tIM8607ndI.jpg" alt="Solar panel cleaning" class="w-full h-full object-cover transition-transform duration-300">
+                    </div>
+                    <div class="p-6 min-h-[120px] flex flex-col items-center justify-center">
+                        <div class="service-icon">
+                            <i class="fas fa-solar-panel"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center">SOLAR ROOFTOP</h3>
+                        <p class="text-gray-600 text-center mt-2">Panel cleaning for efficiency</p>
+                    </div>
+                </div>
+
+                <!-- Service Card 6 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg transition-all duration-300 card-hover cursor-pointer scale-in" onclick="openModal('residential')">
+                    <div class="w-full aspect-[9/16] relative overflow-hidden">
+                        <img src="https://i.imghippo.com/files/raz4206Fr.jpg" alt="Residential cleaning" class="w-full h-full object-cover transition-transform duration-300">
+                    </div>
+                    <div class="p-6 min-h-[120px] flex flex-col items-center justify-center">
+                        <div class="service-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center">RESIDENTIAL</h3>
+                        <p class="text-gray-600 text-center mt-2">Home exterior cleaning</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- More Services Section -->
-    <section class="py-16 md:py-24 bg-white">
+    <!-- Why Choose Us Section -->
+    <section id="why-choose-us" class="py-16 md:py-24 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-blue-900 mb-4">EXPLORE OUR COMPREHENSIVE CLEANING SOLUTIONS</h2>
-                <div class="w-24 h-1 bg-blue-500 mx-auto"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">WHY CHOOSE US</h2>
+                <div class="w-24 h-1 bg-cyan-500 mx-auto"></div>
+                <p class="mt-6 text-gray-600 max-w-2xl mx-auto">
+                    Discover why Perfection Powerwashing is the trusted choice for your exterior cleaning needs.
+                </p>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service 4 -->
-                <div class="service-card bg-gray-50 rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/jZkA1321ayc.jpg" alt="Paver Restoration" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">PRESSURE WASHING, SANDING, & SEALING PAVERS</h3>
-                        <p class="text-gray-600">
-                            Complete paver restoration service including deep cleaning, sand replacement, and protective sealing to extend the life and beauty of your paved surfaces.
-                        </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="bg-gray-50 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-300 scale-in">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-history"></i>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">15+ Years of Experience</h3>
+                    <p class="text-gray-600">
+                        With over 15 years in the industry, our expertise ensures top-quality results for every project.
+                    </p>
                 </div>
-
-                <!-- Service 5 -->
-                <div class="service-card bg-gray-50 rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/pkxY4420wXY.jpg" alt="Pool Deck Cleaning" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">POOL DECK CLEANING FOR A FRESH LOOK</h3>
-                        <p class="text-gray-600">
-                            Transform your pool area with our specialized deck cleaning that eliminates algae, creates safer surfaces, and restores the beauty of your outdoor space.
-                        </p>
+                <div class="bg-gray-50 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-300 scale-in">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Insured and Bonded</h3>
+                    <p class="text-gray-600">
+                        We are fully insured and bonded, giving you peace of mind that your property is protected.
+                    </p>
                 </div>
-
-                <!-- Service 6 -->
-                <div class="service-card bg-gray-50 rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/nmC3336sg.jpg" alt="Stair Cleaning" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">STAIR CLEANING TO ENHANCE SAFETY</h3>
-                        <p class="text-gray-600">
-                            Ensure safety and visual appeal with our thorough stair cleaning service that removes slippery buildup and restores traction to all step surfaces.
-                        </p>
+                <div class="bg-gray-50 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-300 scale-in">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-users"></i>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Professional Team</h3>
+                    <p class="text-gray-600">
+                        Our skilled technicians are trained to deliver exceptional service with attention to detail.
+                    </p>
                 </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-                <!-- Service 7 -->
-                <div class="service-card bg-gray-50 rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/odKz2120poA.jpg" alt="Garden Wall Cleaning" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">GARDEN WALL CLEANING</h3>
-                        <p class="text-gray-600">
-                            Restore the natural beauty of your garden walls and retaining structures with our specialized cleaning that removes moss, algae, and weather stains.
-                        </p>
+                <div class="bg-gray-50 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-300 scale-in">
+                    <div class="text-blue-600 text-4xl mb-4">
+                        <i class="fas fa-thumbs-up"></i>
                     </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Customer Satisfaction</h3>
+                    <p class="text-gray-600">
+                        We prioritize your satisfaction, delivering reliable and high-quality cleaning every time.
+                    </p>
                 </div>
-
-                <!-- Service 8 -->
-                <div class="service-card bg-gray-50 rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/QTQ7090YTc.jpg" alt="Sidewalk Cleaning" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">SIDEWALK CLEANING</h3>
-                        <p class="text-gray-600">
-                            Maintain clean and welcoming sidewalks that enhance your property's street appeal while ensuring safe pedestrian access for all visitors.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Service 9 -->
-                <div class="service-card bg-gray-50 rounded-lg overflow-hidden transition duration-300">
-                    <img src="https://i.imghippo.com/files/Gqd9279nJE.jpg" alt="Car Interior Detailing" class="w-full h-64 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-blue-900 mb-3">CAR INTERIOR DETAILING</h3>
-                        <p class="text-gray-600">
-                            Transform your vehicle's interior with our comprehensive detailing service. We deep clean upholstery, carpets, and surfaces while sanitizing and protecting.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-12">
-                <a href="https://www.instagram.com/blast.wash/" class="inline-block border-2 border-blue-900 text-blue-900 font-bold py-3 px-8 rounded-full hover:bg-blue-900 hover:text-white transition duration-300">
-                    Learn More
-                </a>
             </div>
         </div>
     </section>
@@ -207,103 +395,539 @@
     <section id="testimonials" class="py-16 md:py-24 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-blue-900 mb-4">WHAT OUR CLIENTS SAY</h2>
-                <div class="w-24 h-1 bg-blue-500 mx-auto"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">WHAT OUR CLIENTS SAY</h2>
+                <div class="w-24 h-1 bg-cyan-500 mx-auto"></div>
+                <p class="mt-6 text-gray-600 max-w-2xl mx-auto">
+                    Don't just take our word for it - hear from our satisfied customers
+                </p>
             </div>
 
-            <div class="max-w-4xl mx-auto">
-                <div class="testimonial-card rounded-lg p-8 md:p-12 text-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="testimonial-gradient shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
                     <div class="flex justify-center mb-6">
                         <div class="flex text-yellow-400">
-                            <i class="fas fa-star text-2xl"></i>
-                            <i class="fas fa-star text-2xl"></i>
-                            <i class="fas fa-star text-2xl"></i>
-                            <i class="fas fa-star text-2xl"></i>
-                            <i class="fas fa-star text-2xl"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
                         </div>
                     </div>
-                    <p class="text-xl md:text-2xl italic mb-8">
-                        "MY SEARCH FOR TOP-NOTCH SERVICE ENDS HERE! THE WORK DONE BY BLASTWASH SURPASSES ALL OTHERS I'VE TRIED. HIGHLY IMPRESSED AND DEFINITELY RECOMMENDING THEM TO EVERYONE!"
-                    </p>
-                    <p class="font-bold text-blue-900 text-lg">Hannah, D</p>
+                    <blockquote class="text-lg italic mb-8 text-gray-700">
+                        "I was absolutely blown away by the results! My driveway and siding look brand new. The team was professional, efficient, and the price was very reasonable. I can't recommend Perfection Powerwashing enough!"
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-900">Jessica P.</p>
+                            <p class="text-sm text-gray-600">Seattle, WA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-gradient shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex justify-center mb-6">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <blockquote class="text-lg italic mb-8 text-gray-700">
+                        "After years of neglecting my deck, Perfection Powerwashing brought it back to life! They were punctual, professional, and did an amazing job. My neighbors have already asked for their contact info."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-900">Michael T.</p>
+                            <p class="text-sm text-gray-600">Bellevue, WA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-gradient shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex justify-center mb-6">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <blockquote class="text-lg italic mb-8 text-gray-700">
+                        "As a property manager, I've used many cleaning services. Perfection Powerwashing stands out for their attention to detail and reliability. They've become our go-to service for all our properties."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-900">Sarah L.</p>
+                            <p class="text-sm text-gray-600">Redmond, WA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-gradient shadow-lg rounded-lg p-8 hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex justify-center mb-6">
+                        <div class="flex text-yellow-400">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <blockquote class="text-lg italic mb-8 text-gray-700">
+                        "The solar panel cleaning service increased our energy production by 15%! I didn't realize how much dirt had accumulated. Quick, professional service at a great price. Will definitely use them again."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-blue-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-bold text-gray-900">David K.</p>
+                            <p class="text-sm text-gray-600">Kirkland, WA</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section id="contact" class="cta-gradient text-white py-16 md:py-24">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">GET YOUR FREE ESTIMATE TODAY</h2>
-                <p class="text-xl mb-10 opacity-90">
-                    Contact us now for a complimentary estimate on all your exterior cleaning needs!
-                </p>
-                <a href="tel:+13472723010" class="inline-block bg-white text-blue-900 font-bold py-4 px-8 rounded-full hover:bg-gray-100 transition duration-300 transform hover:scale-105">
-                    Get Free Estimate
+    <section class="py-16 bg-blue-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">READY TO TRANSFORM YOUR PROPERTY?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                Contact us today for a free estimate and let us bring the perfection to your property.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="tel:+12069145841" class="inline-block bg-white text-blue-600 font-bold py-4 px-8 rounded-full hover:bg-gray-100 transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-phone-alt mr-2 phone-icon"></i> Call Now
+                </a>
+                <a href="https://www.instagram.com/perfection.powerwashing/" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-white text-white font-bold py-4 px-8 rounded-full hover:bg-white hover:text-blue-600 transition duration-300 flex items-center justify-center">
+                    <i class="fab fa-instagram mr-2"></i> DM Us
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-blue-900 text-white py-12">
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-6 md:mb-0">
-                    <h3 class="text-2xl font-bold mb-4">BLAST WASH</h3>
-                    <p class="opacity-80">Professional Pressure Washing Services</p>
-                </div>
-                <div class="flex flex-col items-center md:items-end">
-                    <div class="flex space-x-6 mb-6">
-                        <a href="https://www.instagram.com/blast.wash/" class="text-white hover:text-blue-300 text-2xl">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="tel:+13472723010" class="text-white hover:text-blue-300 text-2xl">
-                            <i class="fas fa-phone"></i>
-                        </a>
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">FREQUENTLY ASKED QUESTIONS</h2>
+                <div class="w-24 h-1 bg-cyan-500 mx-auto"></div>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="mb-6">
+                    <button class="faq-question w-full text-left p-4 bg-gray-50 rounded-lg flex justify-between items-center hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-lg">How often should I power wash my home?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer hidden p-4 bg-gray-50 rounded-b-lg">
+                        <p class="text-gray-700">Most homes benefit from power washing once a year. However, if you live in an area with high humidity, near the ocean, or with lots of trees, you might need cleaning every 6-9 months to prevent mold, mildew, and algae buildup.</p>
                     </div>
-                    <a href="tel:+13472723010" class="text-white hover:text-blue-300 font-medium">
-                        +1 (347) 272-3010
-                    </a>
+                </div>
+                
+                <div class="mb-6">
+                    <button class="faq-question w-full text-left p-4 bg-gray-50 rounded-lg flex justify-between items-center hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-lg">Is power washing safe for all surfaces?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer hidden p-4 bg-gray-50 rounded-b-lg">
+                        <p class="text-gray-700">While power washing is generally safe for most exterior surfaces, some delicate materials like older brick, certain types of wood, and some roof shingles require special care. Our professionals adjust the pressure and technique based on each surface to ensure safe, effective cleaning.</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <button class="faq-question w-full text-left p-4 bg-gray-50 rounded-lg flex justify-between items-center hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-lg">What's the difference between power washing and pressure washing?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer hidden p-4 bg-gray-50 rounded-b-lg">
+                        <p class="text-gray-700">The main difference is that power washing uses heated water, which is more effective at removing tough stains, grease, and grime. Pressure washing uses unheated water at high pressure. We use the appropriate method based on your specific cleaning needs.</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <button class="faq-question w-full text-left p-4 bg-gray-50 rounded-lg flex justify-between items-center hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-lg">Do I need to be home during the service?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer hidden p-4 bg-gray-50 rounded-b-lg">
+                        <p class="text-gray-700">No, you don't need to be present as long as we have access to the areas that need cleaning. We'll coordinate with you beforehand about access and any specific instructions.</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <button class="faq-question w-full text-left p-4 bg-gray-50 rounded-lg flex justify-between items-center hover:bg-gray-100 transition-colors">
+                        <span class="font-medium text-lg">How long does a typical power washing service take?</span>
+                        <i class="fas fa-chevron-down transition-transform"></i>
+                    </button>
+                    <div class="faq-answer hidden p-4 bg-gray-50 rounded-b-lg">
+                        <p class="text-gray-700">The duration depends on the size of your property and the services needed. A standard single-family home exterior typically takes 2-4 hours. Driveways, decks, and other surfaces add additional time. We'll provide a time estimate when you request a quote.</p>
+                    </div>
                 </div>
             </div>
-            <div class="border-t border-blue-800 mt-8 pt-8 text-center opacity-80 text-sm">
-                <p>&copy; 2025 Blast Wash. All rights reserved.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-gray-900 text-gray-100">
+        <div class="container mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-water mr-2 text-blue-400"></i>
+                        PERFECTION POWERWASHING
+                    </h3>
+                    <p class="opacity-80 mb-4">Professional Pressure Washing Services in the Greater Seattle Area</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/" target="_blank" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="https://www.youtube.com/" target="_blank" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">QUICK LINKS</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#services" class="text-gray-300 hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#why-choose-us" class="text-gray-300 hover:text-white transition-colors">Why Choose Us</a></li>
+                        <li><a href="#testimonials" class="text-gray-300 hover:text-white transition-colors">Testimonials</a></li>
+                        <li><a href="#footer" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold mb-4">CONTACT US</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-400"></i>
+                            <span>Serving the Greater Seattle Area</span>
+                        </div>
+                        <div class="flex items-center">
+                            <a href="tel:+12069145841" class="flex items-center hover:text-white">
+                                <i class="fas fa-phone-alt mr-3 text-blue-400 phone-icon"></i>
+                                <span>+1 (206) 914-5841</span>
+                            </a>
+                        </div>
+                        <div class="flex items-center">
+                            <a href="https://www.instagram.com/perfection.powerwashing/" target="_blank" rel="noopener noreferrer" class="flex items-center hover:text-white">
+                                <i class="fab fa-instagram mr-3 text-blue-400"></i>
+                                <span>perfection.powerwashing</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center opacity-80 text-sm">
+                <p>&copy; <span id="current-year"></span> Perfection Powerwashing. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hidden hover:bg-blue-700 transition-colors">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden modal-overlay">
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="relative bg-white rounded-lg max-w-3xl w-full overflow-hidden scale-in">
+                <button id="close-modal" class="absolute right-4 top-4 z-50 text-gray-700 hover:text-gray-900 bg-white rounded-full p-2 shadow-md">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <div id="carousel" class="relative w-full h-full">
+                    <!-- Carousel content will be added dynamically -->
+                </div>
+
+                <button id="prev-button" class="absolute left-4 top-1/2 -translate-y-1/2 z-50 carousel-button rounded-full p-3 text-white hover:bg-white hover:text-gray-900 transition">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <button id="next-button" class="absolute right-4 top-1/2 -translate-y-1/2 z-50 carousel-button rounded-full p-3 text-white hover:bg-white hover:text-gray-900 transition">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
         // Mobile menu toggle
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuIcon = document.getElementById('menu-icon');
+        const closeIcon = document.getElementById('close-icon');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuToggle.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.contains('hidden');
+
+            if (isOpen) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
         });
 
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
-                
+
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
+
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
+                    targetElement.scrollIntoView({
                         behavior: 'smooth'
                     });
-                    
+
                     // Close mobile menu if open
-                    const menu = document.getElementById('mobile-menu');
-                    if (!menu.classList.contains('hidden')) {
-                        menu.classList.add('hidden');
-                    }
+                    mobileMenu.classList.add('hidden');
+                    menuIcon.classList.remove('hidden');
+                    closeIcon.classList.add('hidden');
                 }
             });
         });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('hidden');
+            } else {
+                backToTopButton.classList.add('hidden');
+            }
+        });
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // FAQ accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+                
+                // Toggle answer visibility
+                answer.classList.toggle('hidden');
+                
+                // Rotate icon
+                icon.classList.toggle('rotate-180');
+                
+                // Close other open answers
+                faqQuestions.forEach(q => {
+                    if (q !== question) {
+                        q.nextElementSibling.classList.add('hidden');
+                        q.querySelector('i').classList.remove('rotate-180');
+                    }
+                });
+            });
+        });
+
+        // Modal functionality
+        const modal = document.getElementById('modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const prevButton = document.getElementById('prev-button');
+        const nextButton = document.getElementById('next-button');
+        const carousel = document.getElementById('carousel');
+
+        let currentSlide = 0;
+        let slides = [];
+        let serviceData = {
+            before: {
+                title: "BEFORE",
+                images: [
+                    { image: "https://i.imghippo.com/files/CTL7054l.jpg", hint: "dirty siding" },
+                    { image: "https://i.imghippo.com/files/Ia9624ipY.jpg", hint: "dirty concrete" },
+                    { image: "https://i.imghippo.com/files/Soz4443S.jpg", hint: "dirty wall" },
+                    { image: "https://i.imghippo.com/files/ynC4689w.jpg", hint: "dirty tiles" },
+                    { image: "https://i.imghippo.com/files/pOw2870jU.jpg", hint: "dirty facade" },
+                    { image: "https://i.imghippo.com/files/iIzy9343xow.jpg", hint: "dirty pathway" }
+                ],
+                content: "A look at a surface before our professional cleaning service."
+            },
+            after: {
+                title: "AFTER",
+                images: [
+                    { image: "https://i.imghippo.com/files/vURK7452Uc.jpg", hint: "clean siding" },
+                    { image: "https://i.imghippo.com/files/zKH3531m.jpg", hint: "clean concrete" },
+                    { image: "https://i.imghippo.com/files/qy2709wH.jpg", hint: "clean wall" },
+                    { image: "https://i.imghippo.com/files/Je6745wNA.jpg", hint: "clean tiles" },
+                    { image: "https://i.imghippo.com/files/uBB8167Gmk.jpg", hint: "clean facade" },
+                    { image: "https://i.imghippo.com/files/as7083s.jpg", hint: "clean pathway" },
+                    { image: "https://i.imghippo.com/files/cAiq1099OSk.jpg", hint: "clean surface" }
+                ],
+                content: "The sparkling result after our professional cleaning service."
+            },
+            commercial: {
+                title: "COMMERCIAL",
+                images: [
+                    { image: "https://i.imghippo.com/files/lYNe7342qrU.jpg", hint: "storefront cleaning" },
+                    { image: "https://i.imghippo.com/files/ckL6534Czs.jpg", hint: "commercial building" },
+                    { image: "https://i.imghippo.com/files/Wyf6787Dgk.jpg", hint: "commercial building" },
+                    { image: "https://i.imghippo.com/files/WND2138KhE.jpg", hint: "commercial building" },
+                    { image: "https://i.imghippo.com/files/tVin2937ngI.jpg", hint: "commercial building" }
+                ],
+                content: "Enhancing curb appeal for businesses."
+            },
+            decks: {
+                title: "DECKS",
+                images: [
+                    { image: "https://i.imghippo.com/files/QDY4927nmY.jpg", hint: "wood deck before" },
+                    { image: "https://i.imghippo.com/files/yQ3200Tgg.jpg", hint: "wood deck during" },
+                    { image: "https://i.imghippo.com/files/QJGV2759jM.jpg", hint: "wood deck after" },
+                    { image: "https://i.imghippo.com/files/Ttxk7205yDQ.jpg", hint: "clean wood deck" },
+                    { image: "https://i.imghippo.com/files/SYDN6569aw.jpg", hint: "restored wood deck" }
+                ],
+                content: "Restoring wooden decks to their former glory."
+            },
+            solar: {
+                title: "SOLAR ROOFTOP",
+                images: [
+                    { image: "https://i.imghippo.com/files/tIM8607ndI.jpg", hint: "dirty solar panel" },
+                    { image: "https://i.imghippo.com/files/XRyq6011XFQ.jpg", hint: "cleaning solar panel" },
+                    { image: "https://i.imghippo.com/files/sDx6216R.jpg", hint: "clean solar panel" }
+                ],
+                content: "Safely cleaning solar panels for maximum efficiency."
+            },
+            residential: {
+                title: "RESIDENTIAL",
+                images: [
+                    { image: "https://i.imghippo.com/files/raz4206Fr.jpg", hint: "house exterior before" },
+                    { image: "https://i.imghippo.com/files/hmip3916A.jpg", hint: "house exterior during" },
+                    { image: "https://i.imghippo.com/files/QVf4774zvY.jpg", hint: "house exterior after" },
+                    { image: "https://i.imghippo.com/files/tPzk8539QI.jpg", hint: "clean house exterior" }
+                ],
+                content: "Complete exterior house washing services."
+            }
+        };
+
+        function openModal(service) {
+            const serviceInfo = serviceData[service];
+            currentSlide = 0;
+
+            // Clear carousel
+            carousel.innerHTML = '';
+
+            // Create slides
+            slides = serviceInfo.images.map((img, index) => {
+                const slide = document.createElement('div');
+                slide.className = `w-full h-full flex flex-col items-center justify-center p-4 ${index === 0 ? 'block' : 'hidden'}`;
+                slide.innerHTML = `
+                    <div class="relative w-full max-w-md aspect-[9/16] rounded-lg overflow-hidden mb-4">
+                        <img src="${img.image}" alt="${serviceInfo.title} - ${index + 1}" class="w-full h-full object-contain rounded-lg shadow-md">
+                    </div>
+                    <div class="text-center mt-4">
+                        <h3 class="text-2xl font-bold mb-2">${serviceInfo.title}</h3>
+                        <p class="text-gray-700">${serviceInfo.content}</p>
+                        <div class="mt-2 text-sm text-gray-500">${index + 1} of ${serviceInfo.images.length}</div>
+                    </div>
+                `;
+                carousel.appendChild(slide);
+                return slide;
+            });
+
+            // Show/hide navigation buttons based on number of slides
+            if (slides.length <= 1) {
+                prevButton.classList.add('hidden');
+                nextButton.classList.add('hidden');
+            } else {
+                prevButton.classList.remove('hidden');
+                nextButton.classList.remove('hidden');
+            }
+
+            // Show modal
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showSlide(index) {
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('hidden', i !== index);
+            });
+
+            currentSlide = index;
+        }
+
+        // Event listeners for modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+
+        prevButton.addEventListener('click', () => {
+            showSlide(currentSlide - 1);
+        });
+
+        nextButton.addEventListener('click', () => {
+            showSlide(currentSlide + 1);
+        });
+
+        // Close modal when clicking outside content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Animate elements on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.scale-in');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.animation = 'scaleIn 0.5s ease-out forwards';
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
     </script>
 </body>
 </html>
