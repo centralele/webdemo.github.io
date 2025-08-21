@@ -74,9 +74,11 @@
         .carousel-button {
             background-color: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(5px);
+            color: #000000; /* Black arrow color */
         }
         .carousel-button:hover {
-            background-color: rgba(255, 255, 255, 0.4);
+            background-color: rgba(255, 255, 255, 0.2); /* No change on hover */
+            color: #000000; /* Black arrow color on hover */
         }
         .floating {
             animation: floating 3s ease-in-out infinite;
@@ -221,7 +223,7 @@
     <!-- Stats Section -->
     <section class="py-12 bg-white">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
                 <div class="p-4">
                     <div class="text-4xl font-bold text-blue-600 mb-2">500+</div>
                     <div class="text-gray-600">Happy Clients</div>
@@ -233,10 +235,6 @@
                 <div class="p-4">
                     <div class="text-4xl font-bold text-blue-600 mb-2">100%</div>
                     <div class="text-gray-600">Satisfaction</div>
-                </div>
-                <div class="p-4">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">24/7</div>
-                    <div class="text-gray-600">Customer Support</div>
                 </div>
             </div>
         </div>
@@ -658,11 +656,11 @@
                     <!-- Carousel content will be added dynamically -->
                 </div>
 
-                <button id="prev-button" class="absolute left-4 top-1/2 -translate-y-1/2 z-50 carousel-button rounded-full p-3 text-white hover:bg-white hover:text-gray-900 transition">
+                <button id="prev-button" class="absolute left-4 top-1/2 -translate-y-1/2 z-50 carousel-button rounded-full p-3">
                     <i class="fas fa-chevron-left"></i>
                 </button>
 
-                <button id="next-button" class="absolute right-4 top-1/2 -translate-y-1/2 z-50 carousel-button rounded-full p-3 text-white hover:bg-white hover:text-gray-900 transition">
+                <button id="next-button" class="absolute right-4 top-1/2 -translate-y-1/2 z-50 carousel-button rounded-full p-3">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
